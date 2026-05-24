@@ -1,102 +1,137 @@
-async function askAI() {
+const API_URL = 'https://grasstakers-ai.onrender.com';
 
-  const message =
-    document.getElementById('message').value;
+const bookingForm =
+  document.getElementById('bookingForm');
 
-  const responseBox =
-    document.getElementById('response');
+if (bookingForm) {
 
-  if (!message) {
+  bookingForm.addEventListener(
+    'submit',
+    async (e) => {
 
-    alert('Please enter a message');
+      e.preventDefault();
 
-    return;
-  }
+      const name =
+        document.getElementById('name').value;
 
-  responseBox.innerHTML = 'Thinking...';
+      const phone =
+        document.getElementById('phone').value;
 
-  try {
+      const address =
+        document.getElementById('address').value;
 
-    const response = await fetch(
-      'http://localhost:3001/api/chat',
-      {
-        method: 'POST',
+      const service =
+        document.getElementById('service').value;
 
-        headers: {
-          'Content-Type': 'application/json'
-        },
+      const message =
+        document.getElementById('message').value;
 
-        body: JSON.stringify({
-          message: message
-        })
+      try {
+
+        const response = await fetch(
+          `${API_URL}/api/book`,
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+              name,
+              phone,
+              address,
+              service,
+              message
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        const bookingStatus =
+          document.getElementById('bookingStatus');
+
+        if (data.success) {
+
+          bookingStatus.innerHTML =
+            `✅ Booking submitted! ID: ${data.bookingId}`;
+
+          bookingForm.reset();
+
+        } else {
+
+          bookingStatus.innerHTML =
+            '❌ Booking failed';
+
+        }
+
+      } catch (error) {
+
+        console.log(error);
+
+        document.getElementById(
+          'bookingStatus'
+        ).innerHTML =
+          '❌ Server error';
+
       }
-    );
 
-    const data = await response.json();
+    }
+  );
 
-    responseBox.innerHTML = data.reply;
-
-  } catch (error) {
-
-    console.error(error);
-
-    responseBox.innerHTML =
-      '❌ Error connecting to backend.';
-  }
 }
 
-async function submitBooking() {
+const aiButton =
+  document.getElementById('askAIButton');
 
-  const bookingData = {
+if (aiButton) {
 
-    name:
-      document.getElementById('name').value,
+  aiButton.addEventListener(
+    'click',
+    async () => {
 
-    phone:
-      document.getElementById('phone').value,
+      const question =
+        document.getElementById('aiInput').value;
 
-    address:
-      document.getElementById('address').value,
+      const aiResponse =
+        document.getElementById('aiResponse');
 
-    service:
-      document.getElementById('service').value,
+      aiResponse.innerHTML =
+        'Thinking...';
 
-    message:
-      document.getElementById('bookingMessage').value
-  };
+      try {
 
-  try {
+        const response = await fetch(
+          `${API_URL}/api/chat`,
+          {
+            method: 'POST',
 
-    const response = await fetch(
-      'http://localhost:3001/api/book',
-      {
-        method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
 
-        headers: {
-          'Content-Type': 'application/json'
-        },
+            body: JSON.stringify({
+              message: question
+            })
+          }
+        );
 
-        body: JSON.stringify(bookingData)
+        const data = await response.json();
+
+        aiResponse.innerHTML =
+          data.reply || 'No response';
+
+      } catch (error) {
+
+        console.log(error);
+
+        aiResponse.innerHTML =
+          'AI request failed';
+
       }
-    );
 
-    const data = await response.json();
+    }
+  );
 
-    document.getElementById(
-      'bookingResponse'
-    ).innerHTML =
-
-      '✅ Booking submitted! ID: ' +
-      data.bookingId;
-
-  } catch (error) {
-
-    console.error(error);
-
-    document.getElementById(
-      'bookingResponse'
-    ).innerHTML =
-
-      '❌ Booking failed.';
-  }
 }
