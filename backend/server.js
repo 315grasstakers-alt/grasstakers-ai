@@ -75,6 +75,7 @@ app.post('/api/chat', async (req, res) => {
       reply:
         completion.choices?.[0]?.message?.content ||
         'No AI response returned.'
+
     });
 
   } catch (error) {
@@ -205,132 +206,6 @@ app.delete('/api/bookings/:id', (req, res) => {
 
       res.json({
         success: true
-      });
-
-    }
-
-  );
-
-});
-
-app.post('/api/admin/register', async (req, res) => {
-
-  const { username, password } = req.body;
-
-  try {
-
-    const hashedPassword =
-      await bcrypt.hash(password, 10);
-
-    db.run(
-
-      `
-      INSERT INTO admins
-      (
-        username,
-        password
-      )
-      VALUES (?, ?)
-      `,
-
-      [
-        username,
-        hashedPassword
-      ],
-
-      function(err) {
-
-        if (err) {
-
-          console.log(err);
-
-          return res.status(500).json({
-            error: 'Admin creation failed'
-          });
-
-        }
-
-        res.json({
-          success: true
-        });
-
-      }
-
-    );
-
-  } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      error: 'Server error'
-    });
-
-  }
-
-});
-
-app.post('/api/admin/login', (req, res) => {
-
-  const {
-    username,
-    password
-  } = req.body;
-
-  db.get(
-
-    `
-    SELECT *
-    FROM admins
-    WHERE username = ?
-    `,
-
-    [username],
-
-    async (err, admin) => {
-
-      if (err || !admin) {
-
-        return res.status(401).json({
-          error: 'Invalid credentials'
-        });
-
-      }
-
-      const validPassword =
-        await bcrypt.compare(
-          password,
-          admin.password
-        );
-
-      if (!validPassword) {
-
-        return res.status(401).json({
-          error: 'Invalid credentials'
-        });
-
-      }
-
-      const token = jwt.sign(
-
-        {
-          id: admin.id,
-          username: admin.username
-        },
-
-        process.env.JWT_SECRET,
-
-        {
-          expiresIn: '7d'
-        }
-
-      );
-
-      res.json({
-
-        success: true,
-        token
-
       });
 
     }
