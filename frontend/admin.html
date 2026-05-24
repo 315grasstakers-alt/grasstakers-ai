@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    GrassTakers Admin Dashboard
+  </title>
+
+  <style>
+
+    body {
+
+      font-family: Arial;
+
+      background: #f2f7f2;
+
+      padding: 40px;
+    }
+
+    h1 {
+
+      margin-bottom: 30px;
+
+      color: #1f7a36;
+    }
+
+    .booking {
+
+      background: white;
+
+      padding: 25px;
+
+      border-radius: 15px;
+
+      margin-bottom: 20px;
+
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .booking h3 {
+
+      color: #1f7a36;
+
+      margin-bottom: 10px;
+    }
+
+    .delete-btn {
+
+      margin-top: 15px;
+
+      background: red;
+
+      color: white;
+
+      border: none;
+
+      padding: 10px 18px;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <h1>
+    🌿 GrassTakers Admin Dashboard
+  </h1>
+
+  <div id="bookings">
+
+    Loading bookings...
+
+  </div>
+
+  <script>
+
+    async function loadBookings() {
+
+      try {
+
+        const response = await fetch(
+          'http://localhost:3001/api/bookings'
+        );
+
+        const bookings = await response.json();
+
+        const bookingsDiv =
+          document.getElementById('bookings');
+
+        bookingsDiv.innerHTML = '';
+
+        bookings.forEach((booking) => {
+
+          bookingsDiv.innerHTML += `
+
+            <div class="booking">
+
+              <h3>
+                Booking #${booking.id}
+              </h3>
+
+              <p>
+                <strong>Name:</strong>
+                ${booking.name}
+              </p>
+
+              <p>
+                <strong>Phone:</strong>
+                ${booking.phone}
+              </p>
+
+              <p>
+                <strong>Address:</strong>
+                ${booking.address}
+              </p>
+
+              <p>
+                <strong>Service:</strong>
+                ${booking.service}
+              </p>
+
+              <p>
+                <strong>Message:</strong>
+                ${booking.message}
+              </p>
+
+              <p>
+                <strong>Date:</strong>
+                ${booking.created_at}
+              </p>
+
+              <button
+                class="delete-btn"
+                onclick="deleteBooking(${booking.id})"
+              >
+
+                Delete Booking
+
+              </button>
+
+            </div>
+          `;
+        });
+
+      } catch (error) {
+
+        console.log(error);
+
+        document.getElementById(
+          'bookings'
+        ).innerHTML =
+
+          'Failed to load bookings.';
+      }
+    }
+
+    async function deleteBooking(id) {
+
+      const confirmDelete = confirm(
+        'Delete this booking?'
+      );
+
+      if (!confirmDelete) return;
+
+      try {
+
+        await fetch(
+
+          `http://localhost:3001/api/bookings/${id}`,
+
+          {
+            method: 'DELETE'
+          }
+        );
+
+        loadBookings();
+
+      } catch (error) {
+
+        console.log(error);
+
+        alert('Delete failed');
+      }
+    }
+
+    loadBookings();
+
+  </script>
+
+</body>
+</html>

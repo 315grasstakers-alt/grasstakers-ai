@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>GrassTakers AI</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+<body>
+
+  <nav>
+
+    <h2>🌿 GrassTakers</h2>
+
+    <ul>
+
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Reviews</a></li>
+      <li><a href="#">Contact</a></li>
+
+    </ul>
+
+  </nav>
+
+  <section class="hero">
+
+    <h1>
+      Syracuse Lawn Care Made Easy
+    </h1>
+
+    <p>
+      Professional mowing, fertilization,
+      aeration, cleanup, and AI-powered lawn help.
+    </p>
+
+    <button>
+      Get Free Quote
+    </button>
+
+  </section>
+
+  <div class="container">
+
+    <div class="chat-box">
+
+      <h2>
+        Ask GrassTakers AI
+      </h2>
+
+      <br>
+
+      <textarea
+        id="message"
+        placeholder="Ask about lawn care..."
+      ></textarea>
+
+      <button
+        class="chat-btn"
+        onclick="askAI()"
+      >
+        Ask AI
+      </button>
+
+      <div
+        id="response"
+        class="response"
+      >
+        Your AI response will appear here.
+      </div>
+
+    </div>
+
+    <div class="services">
+
+      <div class="card">
+
+        <h3>Lawn Mowing</h3>
+
+        <p>
+          Weekly & biweekly service
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Fertilization</h3>
+
+        <p>
+          Seasonal lawn treatments
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Aeration</h3>
+
+        <p>
+          Healthier roots and thicker grass
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Leaf Cleanup</h3>
+
+        <p>
+          Full seasonal cleanups
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="booking-section">
+
+      <h2>
+        Book Lawn Service
+      </h2>
+
+      <br>
+
+      <input
+        type="text"
+        id="name"
+        placeholder="Your Name"
+      >
+
+      <input
+        type="text"
+        id="phone"
+        placeholder="Phone Number"
+      >
+
+      <input
+        type="text"
+        id="address"
+        placeholder="Address"
+      >
+
+      <select id="service">
+
+        <option>Lawn Mowing</option>
+        <option>Fertilization</option>
+        <option>Aeration</option>
+        <option>Leaf Cleanup</option>
+
+      </select>
+
+      <textarea
+        id="bookingMessage"
+        placeholder="Describe your lawn or service needs..."
+      ></textarea>
+
+      <button onclick="submitBooking()">
+        Submit Booking
+      </button>
+
+      <div
+        id="bookingResponse"
+        class="response"
+      ></div>
+
+    </div>
+
+    <div class="reviews">
+
+      <h2>
+        Customer Reviews
+      </h2>
+
+      <br><br>
+
+      <div class="review-grid">
+
+        <div class="review">
+
+          ⭐⭐⭐⭐⭐
+
+          <br><br>
+
+          “Best lawn service in Syracuse.”
+
+          <br><br>
+
+          — Mike T.
+
+        </div>
+
+        <div class="review">
+
+          ⭐⭐⭐⭐⭐
+
+          <br><br>
+
+          “Amazing service and easy booking.”
+
+          <br><br>
+
+          — Sarah P.
+
+        </div>
+
+        <div class="review">
+
+          ⭐⭐⭐⭐⭐
+
+          <br><br>
+
+          “Fast quotes and great work.”
+
+          <br><br>
+
+          — James R.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+
+    © 2026 GrassTakers Lawn Care • Syracuse, NY
+
+  </footer>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
