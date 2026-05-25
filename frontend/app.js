@@ -28,30 +28,25 @@ if (bookingForm) {
 
       try {
 
-        const response = await fetch(
-          `${API_URL}/api/book`,
-          {
-            method: 'POST',
+const response = await fetch(
+  'https://grasstakers-ai.onrender.com/api/chat',
+  {
+    method: 'POST',
 
-            headers: {
-              'Content-Type': 'application/json'
-            },
+    headers: {
+      'Content-Type': 'application/json'
+    },
 
-            body: JSON.stringify({
-              name,
-              phone,
-              address,
-              service,
-              message
-            })
-          }
-        );
+    body: JSON.stringify({
+      message: message
+    })
+  }
+);
 
-        const data = await response.json();
+const data = await response.json();
 
-        const bookingStatus =
-          document.getElementById('bookingStatus');
-
+document.getElementById('response').innerHTML =
+  data.reply;
         if (data.success) {
 
           bookingStatus.innerHTML =
