@@ -3,85 +3,192 @@
 
 <head>
 
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+  />
 
   <title>GrassTakers AI</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <style>
+
+    body {
+
+      margin: 0;
+      padding: 0;
+
+      background: #0f172a;
+
+      color: white;
+
+      font-family: Arial, sans-serif;
+
+    }
+
+    .container {
+
+      max-width: 1000px;
+
+      margin: auto;
+
+      padding: 40px 20px;
+
+    }
+
+    h1 {
+
+      text-align: center;
+
+      color: #22c55e;
+
+      font-size: 52px;
+
+      margin-bottom: 10px;
+
+    }
+
+    .subtitle {
+
+      text-align: center;
+
+      color: #cbd5e1;
+
+      margin-bottom: 40px;
+
+    }
+
+    .chat-box {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-bottom: 20px;
+
+    }
+
+    input {
+
+      flex: 1;
+
+      padding: 15px;
+
+      border-radius: 10px;
+
+      border: none;
+
+      font-size: 16px;
+
+    }
+
+    button {
+
+      padding: 15px 25px;
+
+      background: #22c55e;
+
+      color: white;
+
+      border: none;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+    }
+
+    button:hover {
+
+      background: #16a34a;
+
+    }
+
+    .response {
+
+      background: #1e293b;
+
+      padding: 20px;
+
+      border-radius: 10px;
+
+      min-height: 80px;
+
+      line-height: 1.6;
+
+      margin-bottom: 50px;
+
+    }
+
+    .services {
+
+      display: grid;
+
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+      );
+
+      gap: 20px;
+
+    }
+
+    .card {
+
+      background: #1e293b;
+
+      padding: 20px;
+
+      border-radius: 10px;
+
+      text-align: center;
+
+    }
+
+    .card h3 {
+
+      color: #22c55e;
+
+    }
+
+  </style>
 
 </head>
 
 <body>
 
-  <nav>
-
-    <h2>🌿 GrassTakers</h2>
-
-    <ul>
-
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">Reviews</a></li>
-      <li><a href="#">Contact</a></li>
-
-    </ul>
-
-  </nav>
-
-  <section class="hero">
-
-    <h1>
-      Syracuse Lawn Care Made Easy
-    </h1>
-
-    <p>
-      Professional mowing, fertilization,
-      aeration, cleanup, and AI-powered lawn help.
-    </p>
-
-    <button>
-      Get Free Quote
-    </button>
-
-  </section>
-
   <div class="container">
+
+    <h1>GrassTakers AI</h1>
+
+    <p class="subtitle">
+      AI-powered lawn care assistant
+    </p>
 
     <div class="chat-box">
 
-      <h2>
-        Ask GrassTakers AI
-      </h2>
-
-      <br>
-
-      <textarea
+      <input
+        type="text"
         id="message"
         placeholder="Ask about lawn care..."
-      ></textarea>
+      />
 
-      <button
-        class="chat-btn"
-        onclick="askAI()"
-      >
+      <button onclick="askAI()">
         Ask AI
       </button>
 
-      <div
-        id="response"
-        class="response"
-      >
-        Your AI response will appear here.
-      </div>
+    </div>
 
+    <div
+      class="response"
+      id="response"
+    >
+      Your AI response will appear here.
     </div>
 
     <div class="services">
@@ -90,9 +197,7 @@
 
         <h3>Lawn Mowing</h3>
 
-        <p>
-          Weekly & biweekly service
-        </p>
+        <p>Starting at $45</p>
 
       </div>
 
@@ -100,9 +205,7 @@
 
         <h3>Fertilization</h3>
 
-        <p>
-          Seasonal lawn treatments
-        </p>
+        <p>Starting at $75</p>
 
       </div>
 
@@ -110,9 +213,7 @@
 
         <h3>Aeration</h3>
 
-        <p>
-          Healthier roots and thicker grass
-        </p>
+        <p>Starting at $150</p>
 
       </div>
 
@@ -120,116 +221,7 @@
 
         <h3>Leaf Cleanup</h3>
 
-        <p>
-          Full seasonal cleanups
-        </p>
-
-      </div>
-
-    </div>
-
-    <div class="booking-section">
-
-      <h2>
-        Book Lawn Service
-      </h2>
-
-      <br>
-
-      <input
-        type="text"
-        id="name"
-        placeholder="Your Name"
-      >
-
-      <input
-        type="text"
-        id="phone"
-        placeholder="Phone Number"
-      >
-
-      <input
-        type="text"
-        id="address"
-        placeholder="Address"
-      >
-
-      <select id="service">
-
-        <option>Lawn Mowing</option>
-        <option>Fertilization</option>
-        <option>Aeration</option>
-        <option>Leaf Cleanup</option>
-
-      </select>
-
-      <textarea
-        id="bookingMessage"
-        placeholder="Describe your lawn or service needs..."
-      ></textarea>
-
-      <button onclick="submitBooking()">
-        Submit Booking
-      </button>
-
-      <div
-        id="bookingResponse"
-        class="response"
-      ></div>
-
-    </div>
-
-    <div class="reviews">
-
-      <h2>
-        Customer Reviews
-      </h2>
-
-      <br><br>
-
-      <div class="review-grid">
-
-        <div class="review">
-
-          ⭐⭐⭐⭐⭐
-
-          <br><br>
-
-          “Best lawn service in Syracuse.”
-
-          <br><br>
-
-          — Mike T.
-
-        </div>
-
-        <div class="review">
-
-          ⭐⭐⭐⭐⭐
-
-          <br><br>
-
-          “Amazing service and easy booking.”
-
-          <br><br>
-
-          — Sarah P.
-
-        </div>
-
-        <div class="review">
-
-          ⭐⭐⭐⭐⭐
-
-          <br><br>
-
-          “Fast quotes and great work.”
-
-          <br><br>
-
-          — James R.
-
-        </div>
+        <p>Seasonal cleanups available</p>
 
       </div>
 
@@ -237,13 +229,65 @@
 
   </div>
 
-  <footer>
+  <script>
 
-    © 2026 GrassTakers Lawn Care • Syracuse, NY
+    async function askAI() {
 
-  </footer>
+      const message =
+        document.getElementById('message').value;
 
-  <script src="app.js"></script>
+      const responseBox =
+        document.getElementById('response');
+
+      if (!message) {
+
+        alert('Please enter a message');
+
+        return;
+
+      }
+
+      responseBox.innerHTML =
+        'Thinking...';
+
+      try {
+
+        const response = await fetch(
+          'https://grasstakers-ai.onrender.com/api/chat',
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+              message: message
+            })
+
+          }
+        );
+
+        const data =
+          await response.json();
+
+        responseBox.innerHTML =
+          data.reply ||
+          'No response returned';
+
+      } catch (error) {
+
+        console.log(error);
+
+        responseBox.innerHTML =
+          'Server connection failed';
+
+      }
+
+    }
+
+  </script>
 
 </body>
+
 </html>
