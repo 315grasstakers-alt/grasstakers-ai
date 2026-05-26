@@ -1,3 +1,27 @@
+require('dotenv').config();
+
+const express = require('express');
+const cors = require('cors');
+const Groq = require('groq-sdk');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
+
+app.get('/', (req, res) => {
+
+  res.json({
+    status: 'ok',
+    service: 'GrassTakers Backend Running'
+  });
+
+});
+
 app.post('/api/chat', async (req, res) => {
 
   try {
@@ -30,12 +54,22 @@ app.post('/api/chat', async (req, res) => {
 
   } catch (error) {
 
-    console.log('GROQ ERROR:', error);
+    console.log(error);
 
     res.status(500).json({
       error: 'AI request failed'
     });
 
   }
+
+});
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, '0.0.0.0', () => {
+
+  console.log(
+    `🌿 GrassTakers AI running on port ${PORT}`
+  );
 
 });
