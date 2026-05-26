@@ -1,132 +1,42 @@
-const API_URL = 'https://grasstakers-ai.onrender.com';
+async function askAI() {
 
-const bookingForm =
-  document.getElementById('bookingForm');
+  const message =
+    document.getElementById('message').value;
 
-if (bookingForm) {
-
-  bookingForm.addEventListener(
-    'submit',
-    async (e) => {
-
-      e.preventDefault();
-
-      const name =
-        document.getElementById('name').value;
-
-      const phone =
-        document.getElementById('phone').value;
-
-      const address =
-        document.getElementById('address').value;
-
-      const service =
-        document.getElementById('service').value;
-
-      const message =
-        document.getElementById('message').value;
-
-      try {
-
-const response = await fetch(
-  'https://grasstakers-ai.onrender.com/api/chat',
-  {
-    method: 'POST',
-
-    headers: {
-      'Content-Type': 'application/json'
-    },
-
-    body: JSON.stringify({
-      message: message
-    })
+  if (!message) {
+    alert('Please enter a message');
+    return;
   }
-);
 
-const data = await response.json();
+  try {
 
-document.getElementById('response').innerHTML =
-  data.reply;
-        if (data.success) {
+    const response = await fetch(
+      'https://grasstakers-ai.onrender.com/api/chat',
+      {
+        method: 'POST',
 
-          bookingStatus.innerHTML =
-            `✅ Booking submitted! ID: ${data.bookingId}`;
+        headers: {
+          'Content-Type': 'application/json'
+        },
 
-          bookingForm.reset();
-
-        } else {
-
-          bookingStatus.innerHTML =
-            '❌ Booking failed';
-
-        }
-
-      } catch (error) {
-
-        console.log(error);
-
-        document.getElementById(
-          'bookingStatus'
-        ).innerHTML =
-          '❌ Server error';
-
+        body: JSON.stringify({
+          message: message
+        })
       }
+    );
 
-    }
-  );
+    const data = await response.json();
 
-}
+    document.getElementById('response').innerText =
+      data.reply || data.error;
 
-const aiButton =
-  document.getElementById('askAIButton');
+  } catch (error) {
 
-if (aiButton) {
+    console.log(error);
 
-  aiButton.addEventListener(
-    'click',
-    async () => {
+    document.getElementById('response').innerText =
+      'Server connection failed';
 
-      const question =
-        document.getElementById('aiInput').value;
-
-      const aiResponse =
-        document.getElementById('aiResponse');
-
-      aiResponse.innerHTML =
-        'Thinking...';
-
-      try {
-
-        const response = await fetch(
-          `${API_URL}/api/chat`,
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify({
-              message: question
-            })
-          }
-        );
-
-        const data = await response.json();
-
-        aiResponse.innerHTML =
-          data.reply || 'No response';
-
-      } catch (error) {
-
-        console.log(error);
-
-        aiResponse.innerHTML =
-          'AI request failed';
-
-      }
-
-    }
-  );
+  }
 
 }
