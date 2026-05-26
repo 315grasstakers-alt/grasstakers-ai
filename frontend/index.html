@@ -1,121 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
   <title>GrassTakers AI</title>
 
   <style>
+
     body {
-      font-family: Arial;
-      background: #111;
-      color: white;
-      padding: 40px;
+
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
       text-align: center;
     }
 
+    .container {
+
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
     h1 {
-      color: #39ff14;
+
+      color: green;
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    p {
+
+      color: #555;
+      margin-bottom: 30px;
     }
 
     input {
-      width: 300px;
-      padding: 12px;
+
+      width: 70%;
+      padding: 15px;
       border-radius: 8px;
-      border: none;
-      margin-top: 20px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
 
     button {
-      padding: 12px 20px;
+
+      padding: 15px 25px;
       border: none;
       border-radius: 8px;
-      background: #39ff14;
-      color: black;
-      font-weight: bold;
+      background: green;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
       margin-left: 10px;
     }
 
+    button:hover {
+
+      background: darkgreen;
+    }
+
     .response {
-      margin-top: 20px;
+
+      margin-top: 30px;
       padding: 20px;
-      background: #1e1e1e;
+      background: white;
       border-radius: 10px;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
+      min-height: 50px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .services {
+
+      margin-top: 50px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      margin-top: 40px;
     }
 
     .card {
-      background: #1e1e1e;
+
+      background: white;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
   </style>
+
 </head>
 
 <body>
 
-  <h1>GrassTakers AI</h1>
+  <div class="container">
 
-  <p>AI-powered lawn care assistant</p>
+    <h1>GrassTakers AI</h1>
 
-  <input
-    type="text"
-    id="message"
-    placeholder="Ask GrassTakers AI..."
-  />
+    <p>
+      AI-powered lawn care assistant
+    </p>
 
-  <button onclick="askAI()">Ask AI</button>
+    <input
+      type="text"
+      id="message"
+      placeholder="Ask GrassTakers AI..."
+    />
 
-  <div class="response" id="response">
-    Your AI response will appear here.
-  </div>
+    <button onclick="askAI()">
+      Ask AI
+    </button>
 
-  <div class="services">
-
-    <div class="card">
-      <h3>Lawn Mowing</h3>
-      <p>Starting at $45</p>
+    <div
+      class="response"
+      id="response"
+    >
+      Your AI response will appear here.
     </div>
 
-    <div class="card">
-      <h3>Fertilization</h3>
-      <p>Starting at $75</p>
-    </div>
+    <div class="services">
 
-    <div class="card">
-      <h3>Aeration</h3>
-      <p>Starting at $150</p>
-    </div>
+      <div class="card">
+        <h3>Lawn Mowing</h3>
+        <p>Starting at $45</p>
+      </div>
 
-    <div class="card">
-      <h3>Leaf Cleanup</h3>
-      <p>Seasonal cleanups available</p>
+      <div class="card">
+        <h3>Fertilization</h3>
+        <p>Starting at $75</p>
+      </div>
+
+      <div class="card">
+        <h3>Aeration</h3>
+        <p>Starting at $150</p>
+      </div>
+
+      <div class="card">
+        <h3>Leaf Cleanup</h3>
+        <p>Seasonal cleanups available</p>
+      </div>
+
     </div>
 
   </div>
 
   <script>
+
     async function askAI() {
 
       const message =
         document.getElementById('message').value;
 
+      const responseBox =
+        document.getElementById('response');
+
       if (!message) {
-        alert('Please enter a message');
+
+        responseBox.innerHTML =
+          'Please enter a message';
+
         return;
       }
 
-      document.getElementById('response').innerText =
+      responseBox.innerHTML =
         'Thinking...';
 
       try {
@@ -137,18 +192,18 @@
 
         const data = await response.json();
 
-        document.getElementById('response').innerText =
-          data.reply || 'No response from AI';
+        responseBox.innerHTML =
+          data.reply || data.error;
 
       } catch (error) {
 
         console.log(error);
 
-        document.getElementById('response').innerText =
+        responseBox.innerHTML =
           'Server connection failed';
-
       }
     }
+
   </script>
 
 </body>
