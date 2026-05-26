@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GrassTakers AI</title>
 
   <style>
-
     body {
       font-family: Arial;
       background: #111;
@@ -23,50 +15,51 @@
     }
 
     h1 {
-      color: #00ff88;
+      color: #39ff14;
     }
 
     input {
       width: 300px;
       padding: 12px;
-      border: none;
       border-radius: 8px;
-      margin-bottom: 10px;
+      border: none;
+      margin-top: 20px;
     }
 
     button {
       padding: 12px 20px;
       border: none;
       border-radius: 8px;
-      background: #00ff88;
+      background: #39ff14;
       color: black;
       font-weight: bold;
       cursor: pointer;
+      margin-left: 10px;
     }
 
     .response {
       margin-top: 20px;
       padding: 20px;
-      background: #222;
+      background: #1e1e1e;
       border-radius: 10px;
-      min-height: 50px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .services {
-      margin-top: 40px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
+      margin-top: 40px;
     }
 
     .card {
-      background: #1d1d1d;
+      background: #1e1e1e;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
     }
-
   </style>
-
 </head>
 
 <body>
@@ -81,16 +74,9 @@
     placeholder="Ask GrassTakers AI..."
   />
 
-  <br><br>
+  <button onclick="askAI()">Ask AI</button>
 
-  <button onclick="askAI()">
-    Ask AI
-  </button>
-
-  <div
-    class="response"
-    id="response"
-  >
+  <div class="response" id="response">
     Your AI response will appear here.
   </div>
 
@@ -119,32 +105,24 @@
   </div>
 
   <script>
-
     async function askAI() {
 
       const message =
         document.getElementById('message').value;
 
-      const responseBox =
-        document.getElementById('response');
-
       if (!message) {
-
-        responseBox.innerText =
-          'Please enter a message';
-
+        alert('Please enter a message');
         return;
       }
 
-      responseBox.innerText =
-        'Loading...';
+      document.getElementById('response').innerText =
+        'Thinking...';
 
       try {
 
         const response = await fetch(
           'https://grasstakers-ai.onrender.com/api/chat',
           {
-
             method: 'POST',
 
             headers: {
@@ -154,30 +132,23 @@
             body: JSON.stringify({
               message: message
             })
-
           }
         );
 
         const data = await response.json();
 
-        console.log(data);
-
-        responseBox.innerText =
-          data.reply ||
-          data.error ||
-          'No response returned';
+        document.getElementById('response').innerText =
+          data.reply || 'No response from AI';
 
       } catch (error) {
 
         console.log(error);
 
-        responseBox.innerText =
+        document.getElementById('response').innerText =
           'Server connection failed';
 
       }
-
     }
-
   </script>
 
 </body>
