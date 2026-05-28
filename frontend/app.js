@@ -1,24 +1,22 @@
-const API_URL =
-  'https://grasstakers-ai.onrender.com';
+const API_URL = 'https://grasstakers-ai.onrender.com';
 
 async function askAI() {
 
-  const question =
+  const message =
     document.getElementById('message').value;
 
   const responseBox =
     document.getElementById('response');
 
-  if (!question) {
+  if (!message) {
 
     responseBox.innerHTML =
-      'Please enter a message';
+      'Please type a message';
 
     return;
   }
 
-  responseBox.innerHTML =
-    'Thinking...';
+  responseBox.innerHTML = 'Thinking...';
 
   try {
 
@@ -32,15 +30,17 @@ async function askAI() {
         },
 
         body: JSON.stringify({
-          message: question
+          message: message
         })
       }
     );
 
     const data = await response.json();
 
+    console.log(data);
+
     responseBox.innerHTML =
-      data.reply || data.error;
+      data.reply || 'No response from AI';
 
   } catch (error) {
 
@@ -48,81 +48,7 @@ async function askAI() {
 
     responseBox.innerHTML =
       'AI request failed';
+
   }
-}
 
-const bookingForm =
-  document.getElementById('bookingForm');
-
-if (bookingForm) {
-
-  bookingForm.addEventListener(
-    'submit',
-    async (e) => {
-
-      e.preventDefault();
-
-      const name =
-        document.getElementById('name').value;
-
-      const phone =
-        document.getElementById('phone').value;
-
-      const address =
-        document.getElementById('address').value;
-
-      const service =
-        document.getElementById('service').value;
-
-      const message =
-        document.getElementById('bookingMessage').value;
-
-      const bookingStatus =
-        document.getElementById('bookingStatus');
-
-      try {
-
-        const response = await fetch(
-          `${API_URL}/api/book`,
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify({
-              name,
-              phone,
-              address,
-              service,
-              message
-            })
-          }
-        );
-
-        const data = await response.json();
-
-        if (data.success) {
-
-          bookingStatus.innerHTML =
-            `✅ Booking submitted! ID: ${data.bookingId}`;
-
-          bookingForm.reset();
-
-        } else {
-
-          bookingStatus.innerHTML =
-            '❌ Booking failed';
-        }
-
-      } catch (error) {
-
-        console.log(error);
-
-        bookingStatus.innerHTML =
-          '❌ Server error';
-      }
-    }
-  );
 }
