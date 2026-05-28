@@ -46,12 +46,13 @@ app.post('/api/chat', async (req, res) => {
           }
         ],
 
-        model: 'llama3-8b-8192'
+        model: 'llama-3.1-8b-instant'
 
       });
 
     const reply =
-      completion.choices[0].message.content;
+      completion.choices?.[0]?.message?.content ||
+      'No AI response';
 
     res.json({
       reply: reply
@@ -59,7 +60,7 @@ app.post('/api/chat', async (req, res) => {
 
   } catch (error) {
 
-    console.log('GROQ ERROR:', error);
+    console.log(error);
 
     res.status(500).json({
       reply: 'AI request failed'
