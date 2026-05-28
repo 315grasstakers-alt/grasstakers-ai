@@ -48,6 +48,12 @@ app.post('/api/chat', async (req, res) => {
 
     const message = req.body.message;
 
+    if (!message) {
+      return res.status(400).json({
+        reply: 'No message provided'
+      });
+    }
+
     const completion =
       await groq.chat.completions.create({
 
@@ -62,14 +68,16 @@ app.post('/api/chat', async (req, res) => {
 
       });
 
+    const reply =
+      completion.choices?.[0]?.message?.content;
+
     res.json({
-      reply:
-        completion.choices[0].message.content
+      reply: reply || 'No AI response'
     });
 
   } catch (error) {
 
-    console.log(error);
+    console.log('GROQ ERROR:', error);
 
     res.status(500).json({
       reply: 'AI request failed'
