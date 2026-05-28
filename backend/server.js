@@ -2,27 +2,70 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const Groq = require('groq-sdk');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
+
 app.get('/', (req, res) => {
 
   res.json({
-    status: 'ok'
+    status: 'ok',
+    service: 'GrassTakers Backend Running'
   });
 
 });
 
 app.post('/api/chat', async (req, res) => {
 
-  const message = req.body.message;
+  try {
 
-  res.json({
-    reply: `GrassTakers AI received: ${message}`
-  });
+    const message = req.body.message;
+
+    if (!message) {
+
+      return res.status(400).json({
+        reply: 'No message provided'
+      });
+
+    }
+
+    const completion =
+      await groq.chat.completions.create({
+
+        messages: [
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+
+        model: 'llama3-8b-8192'
+
+      });
+
+    const reply =
+      completion.choices[0].message.content;
+
+    res.json({
+      reply: reply
+    });
+
+  } catch (error) {
+
+    console.log('GROQ ERROR:', error);
+
+    res.status(500).json({
+      reply: 'AI request failed'
+    });
+
+  }
 
 });
 
@@ -31,6 +74,8 @@ const PORT =
 
 app.listen(PORT, '0.0.0.0', () => {
 
-  console.log(`Server running on ${PORT}`);
+  console.log(
+    `GrassTakers backend running on ${PORT}`
+  );
 
 });
