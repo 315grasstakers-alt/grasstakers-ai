@@ -65,7 +65,7 @@ app.post('/api/chat', async (req, res) => {
           {
             role: 'system',
             content:
-              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, weed control, aeration, landscaping, and seasonal cleanup.'
+              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, aeration, landscaping, weed control, and seasonal cleanup.'
           },
 
           {
@@ -179,6 +179,42 @@ app.get('/api/bookings', (req, res) => {
       }
 
       res.json(rows);
+
+    }
+
+  );
+
+});
+
+app.delete('/api/bookings/:id', (req, res) => {
+
+  const bookingId =
+    req.params.id;
+
+  db.run(
+
+    `
+    DELETE FROM bookings
+    WHERE id = ?
+    `,
+
+    [bookingId],
+
+    function(err) {
+
+      if (err) {
+
+        console.log(err);
+
+        return res.status(500).json({
+          success: false
+        });
+
+      }
+
+      res.json({
+        success: true
+      });
 
     }
 
