@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const Groq = require('groq-sdk');
 const sqlite3 = require('sqlite3').verbose();
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -14,9 +15,7 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
 
-const db = new sqlite3.Database(
-  './grasstakers.db'
-);
+const db = new sqlite3.Database('./grasstakers.db');
 
 db.serialize(() => {
 
@@ -43,6 +42,35 @@ app.get('/', (req, res) => {
 
 });
 
+app.post('/api/admin/login', (req, res) => {
+
+  const { username, password } = req.body;
+
+  if (
+    username === process.env.ADMIN_USER &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+
+    const token = jwt.sign(
+      { admin: true },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    return res.json({
+      success: true,
+      token
+    });
+
+  }
+
+  res.status(401).json({
+    success: false,
+    message: 'Invalid username or password'
+  });
+
+});
+
 app.post('/api/chat', async (req, res) => {
 
   try {
@@ -65,7 +93,7 @@ app.post('/api/chat', async (req, res) => {
           {
             role: 'system',
             content:
-              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, aeration, landscaping, weed control, and seasonal cleanup.'
+              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, aeration, landscaping, weed control, seasonal cleanup, and lawn maintenance.'
           },
 
           {
@@ -84,7 +112,7 @@ app.post('/api/chat', async (req, res) => {
       'No AI response';
 
     res.json({
-      reply: reply
+      reply
     });
 
   } catch (error) {
@@ -110,7 +138,6 @@ app.post('/api/book', (req, res) => {
   } = req.body;
 
   db.run(
-
     `
     INSERT INTO bookings
     (
@@ -122,7 +149,6 @@ app.post('/api/book', (req, res) => {
     )
     VALUES (?, ?, ?, ?, ?)
     `,
-
     [
       name,
       phone,
@@ -130,7 +156,6 @@ app.post('/api/book', (req, res) => {
       service,
       message
     ],
-
     function(err) {
 
       if (err) {
@@ -149,7 +174,6 @@ app.post('/api/book', (req, res) => {
       });
 
     }
-
   );
 
 });
@@ -157,15 +181,12 @@ app.post('/api/book', (req, res) => {
 app.get('/api/bookings', (req, res) => {
 
   db.all(
-
     `
     SELECT *
     FROM bookings
     ORDER BY created_at DESC
     `,
-
     [],
-
     (err, rows) => {
 
       if (err) {
@@ -181,25 +202,20 @@ app.get('/api/bookings', (req, res) => {
       res.json(rows);
 
     }
-
   );
 
 });
 
 app.delete('/api/bookings/:id', (req, res) => {
 
-  const bookingId =
-    req.params.id;
+  const bookingId = req.params.id;
 
   db.run(
-
     `
     DELETE FROM bookings
     WHERE id = ?
     `,
-
     [bookingId],
-
     function(err) {
 
       if (err) {
@@ -217,13 +233,11 @@ app.delete('/api/bookings/:id', (req, res) => {
       });
 
     }
-
   );
 
 });
 
-const PORT =
-  process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, '0.0.0.0', () => {
 

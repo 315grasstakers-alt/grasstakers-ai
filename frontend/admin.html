@@ -54,7 +54,17 @@
   <h1>GrassTakers Admin Dashboard</h1>
 
   <div id="bookings"></div>
+const token =
+  localStorage.getItem(
+    'adminToken'
+  );
 
+if (!token) {
+
+  window.location =
+    '/admin-login.html';
+
+}
   <script>
 
     const API_URL =

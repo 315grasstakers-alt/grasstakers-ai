@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GrassTakers Admin Login</title>
+</head>
+<body>
+
+<h1>Admin Login</h1>
+
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">
+  Login
+</button>
+
+<p id="status"></p>
+
+<script>
+
+const API_URL =
+  'https://grasstakers-ai.onrender.com';
+
+async function login() {
+
+  const username =
+    document.getElementById('username').value;
+
+  const password =
+    document.getElementById('password').value;
+
+  const response = await fetch(
+    `${API_URL}/api/admin/login`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    }
+  );
+
+  const data =
+    await response.json();
+
+  if (data.success) {
+
+    localStorage.setItem(
+      'adminToken',
+      data.token
+    );
+
+    window.location =
+      '/admin.html';
+
+  } else {
+
+    document.getElementById(
+      'status'
+    ).innerHTML =
+      'Login failed';
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
