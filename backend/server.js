@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const Groq = require('groq-sdk');
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 
@@ -11,6 +12,26 @@ app.use(express.json());
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
+});
+
+const db = new sqlite3.Database(
+  './grasstakers.db'
+);
+
+db.serialize(() => {
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      phone TEXT,
+      address TEXT,
+      service TEXT,
+      message TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
 });
 
 app.get('/', (req, res) => {
@@ -44,7 +65,7 @@ app.post('/api/chat', async (req, res) => {
           {
             role: 'system',
             content:
-              'You are GrassTakers AI, a professional lawn care assistant. You help customers with lawn mowing, fertilization, aeration, weed control, landscaping, seasonal cleanup, and lawn maintenance. Keep answers friendly, professional, short, and helpful.'
+              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, weed control, aeration, landscaping, and seasonal cleanup.'
           },
 
           {
@@ -68,13 +89,100 @@ app.post('/api/chat', async (req, res) => {
 
   } catch (error) {
 
-    console.log('GROQ ERROR:', error);
+    console.log(error);
 
     res.status(500).json({
       reply: 'AI request failed'
     });
 
   }
+
+});
+
+app.post('/api/book', (req, res) => {
+
+  const {
+    name,
+    phone,
+    address,
+    service,
+    message
+  } = req.body;
+
+  db.run(
+
+    `
+    INSERT INTO bookings
+    (
+      name,
+      phone,
+      address,
+      service,
+      message
+    )
+    VALUES (?, ?, ?, ?, ?)
+    `,
+
+    [
+      name,
+      phone,
+      address,
+      service,
+      message
+    ],
+
+    function(err) {
+
+      if (err) {
+
+        console.log(err);
+
+        return res.status(500).json({
+          success: false
+        });
+
+      }
+
+      res.json({
+        success: true,
+        bookingId: this.lastID
+      });
+
+    }
+
+  );
+
+});
+
+app.get('/api/bookings', (req, res) => {
+
+  db.all(
+
+    `
+    SELECT *
+    FROM bookings
+    ORDER BY created_at DESC
+    `,
+
+    [],
+
+    (err, rows) => {
+
+      if (err) {
+
+        console.log(err);
+
+        return res.status(500).json({
+          error: 'Database error'
+        });
+
+      }
+
+      res.json(rows);
+
+    }
+
+  );
 
 });
 

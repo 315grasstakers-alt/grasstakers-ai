@@ -15,84 +15,54 @@
   <style>
 
     body {
-
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-
-    .container {
-
-      max-width: 800px;
+      font-family: Arial;
+      background: #111;
+      color: white;
+      padding: 40px;
+      max-width: 900px;
       margin: auto;
-      padding: 40px 20px;
     }
 
     h1 {
-
-      color: green;
-      font-size: 48px;
-      margin-bottom: 10px;
+      color: #4ade80;
     }
 
-    p {
+    input,
+    textarea,
+    button,
+    select {
 
-      color: #555;
-      margin-bottom: 30px;
-    }
-
-    input {
-
-      width: 70%;
-      padding: 15px;
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      margin-bottom: 15px;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: none;
       font-size: 16px;
     }
 
     button {
-
-      padding: 15px 25px;
-      border: none;
-      border-radius: 8px;
-      background: green;
-      color: white;
-      font-size: 16px;
+      background: #4ade80;
+      color: black;
+      font-weight: bold;
       cursor: pointer;
-      margin-left: 10px;
     }
 
-    button:hover {
+    .response,
+    .card,
+    .booking-box {
 
-      background: darkgreen;
-    }
-
-    .response {
-
-      margin-top: 30px;
+      background: #1f1f1f;
       padding: 20px;
-      background: white;
       border-radius: 10px;
-      min-height: 50px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-top: 20px;
     }
 
     .services {
-
-      margin-top: 50px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-    }
-
-    .card {
-
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-top: 30px;
     }
 
   </style>
@@ -101,110 +71,97 @@
 
 <body>
 
-  <div class="container">
+  <h1>GrassTakers AI</h1>
 
-    <h1>GrassTakers AI</h1>
+  <p>AI-powered lawn care assistant</p>
 
-    <p>
-      AI-powered lawn care assistant
-    </p>
+  <input
+    type="text"
+    id="message"
+    placeholder="Ask GrassTakers AI..."
+  />
+
+  <button onclick="askAI()">
+    Ask AI
+  </button>
+
+  <div
+    class="response"
+    id="response"
+  >
+    Your AI response will appear here.
+  </div>
+
+  <div class="booking-box">
+
+    <h2>Book Lawn Service</h2>
 
     <input
       type="text"
-      id="message"
-      placeholder="Ask GrassTakers AI..."
+      id="name"
+      placeholder="Your Name"
     />
 
-    <button onclick="askAI()">
-      Ask AI
+    <input
+      type="text"
+      id="phone"
+      placeholder="Phone Number"
+    />
+
+    <input
+      type="text"
+      id="address"
+      placeholder="Property Address"
+    />
+
+    <select id="service">
+
+      <option>Lawn Mowing</option>
+      <option>Fertilization</option>
+      <option>Aeration</option>
+      <option>Leaf Cleanup</option>
+
+    </select>
+
+    <textarea
+      id="bookingMessage"
+      placeholder="Additional details..."
+    ></textarea>
+
+    <button onclick="submitBooking()">
+      Submit Booking
     </button>
 
-    <div
-      class="response"
-      id="response"
-    >
-      Your AI response will appear here.
+    <div id="bookingResponse"></div>
+
+  </div>
+
+  <div class="services">
+
+    <div class="card">
+      <h3>Lawn Mowing</h3>
+      <p>Starting at $45</p>
     </div>
 
-    <div class="services">
+    <div class="card">
+      <h3>Fertilization</h3>
+      <p>Starting at $75</p>
+    </div>
 
-      <div class="card">
-        <h3>Lawn Mowing</h3>
-        <p>Starting at $45</p>
-      </div>
+    <div class="card">
+      <h3>Aeration</h3>
+      <p>Starting at $150</p>
+    </div>
 
-      <div class="card">
-        <h3>Fertilization</h3>
-        <p>Starting at $75</p>
-      </div>
-
-      <div class="card">
-        <h3>Aeration</h3>
-        <p>Starting at $150</p>
-      </div>
-
-      <div class="card">
-        <h3>Leaf Cleanup</h3>
-        <p>Seasonal cleanups available</p>
-      </div>
-
+    <div class="card">
+      <h3>Leaf Cleanup</h3>
+      <p>Seasonal cleanups available</p>
     </div>
 
   </div>
 
-  <script>
-
-    async function askAI() {
-
-      const message =
-        document.getElementById('message').value;
-
-      const responseBox =
-        document.getElementById('response');
-
-      if (!message) {
-
-        responseBox.innerHTML =
-          'Please enter a message';
-
-        return;
-      }
-
-      responseBox.innerHTML =
-        'Thinking...';
-
-      try {
-
-        const response = await fetch(
-          'https://grasstakers-ai.onrender.com/api/chat',
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify({
-              message: message
-            })
-          }
-        );
-
-        const data = await response.json();
-
-        responseBox.innerHTML =
-          data.reply || data.error;
-
-      } catch (error) {
-
-        console.log(error);
-
-        responseBox.innerHTML =
-          'Server connection failed';
-      }
-    }
-
-  </script>
+  <script src="app.js"></script>
 
 </body>
+
 </html>
