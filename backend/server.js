@@ -40,10 +40,18 @@ app.post('/api/chat', async (req, res) => {
       await groq.chat.completions.create({
 
         messages: [
+
+          {
+            role: 'system',
+            content:
+              'You are GrassTakers AI, a professional lawn care assistant. You help customers with lawn mowing, fertilization, aeration, weed control, landscaping, seasonal cleanup, and lawn maintenance. Keep answers friendly, professional, short, and helpful.'
+          },
+
           {
             role: 'user',
             content: message
           }
+
         ],
 
         model: 'llama-3.1-8b-instant'
@@ -60,7 +68,7 @@ app.post('/api/chat', async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.log('GROQ ERROR:', error);
 
     res.status(500).json({
       reply: 'AI request failed'
