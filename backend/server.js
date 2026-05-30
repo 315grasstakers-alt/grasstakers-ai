@@ -6,6 +6,7 @@ const Groq = require('groq-sdk');
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
 const { Resend } = require('resend');
+const axios = require('axios');
 
 const app = express();
 
@@ -172,31 +173,64 @@ app.post('/api/book', (req, res) => {
 
       try {
 
-        await resend.emails.send({
+        if (process.env.RESEND_API_KEY) {
 
-          from: 'onboarding@resend.dev',
+          await resend.emails.send({
 
-          to: '315grasstakers@gmail.com',
+            from: 'onboarding@resend.dev',
 
-          subject: 'New GrassTakers Booking',
+            to: '315grasstakers@gmail.com',
 
-          html: `
-            <h2>New Booking</h2>
+            subject: 'New GrassTakers Booking',
 
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Address:</strong> ${address}</p>
-            <p><strong>Service:</strong> ${service}</p>
-            <p><strong>Message:</strong> ${message}</p>
-          `
+            html: `
+              <h2>New Booking</h2>
 
-        });
+              <p><strong>Name:</strong> ${name}</p>
+              <p><strong>Phone:</strong> ${phone}</p>
+              <p><strong>Address:</strong> ${address}</p>
+              <p><strong>Service:</strong> ${service}</p>
+              <p><strong>Message:</strong> ${message}</p>
+            `
+
+          });
+
+        }
 
       } catch (emailError) {
 
         console.log(
           'Email Error:',
           emailError
+        );
+
+      }
+
+      try {
+
+        if (process.env.DISCORD_WEBHOOK_URL) {
+
+          await axios.post(
+            process.env.DISCORD_WEBHOOK_URL,
+            {
+              content:
+`🌱 NEW GRASSTAKERS BOOKING
+
+Name: ${name}
+Phone: ${phone}
+Address: ${address}
+Service: ${service}
+Message: ${message}`
+            }
+          );
+
+        }
+
+      } catch (discordError) {
+
+        console.log(
+          'Discord Error:',
+          discordError.message
         );
 
       }
