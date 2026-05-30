@@ -3,46 +3,48 @@
 
 <head>
 
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  />
+  >
 
-  <title>GrassTakers Admin</title>
+  <title>
+    GrassTakers Admin Dashboard
+  </title>
 
   <style>
 
     body {
-      font-family: Arial;
-      background: #111;
-      color: white;
-      padding: 40px;
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
     }
 
     h1 {
-      color: #4ade80;
+      color: green;
     }
 
     .booking {
-
-      background: #1f1f1f;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
     }
 
     button {
-
       background: red;
       color: white;
       border: none;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 8px 12px;
       cursor: pointer;
+      border-radius: 4px;
+    }
 
+    button:hover {
+      opacity: 0.9;
     }
 
   </style>
@@ -51,9 +53,8 @@
 
 <body>
 
-  <h1>GrassTakers Admin Dashboard</h1>
+<script>
 
-  <div id="bookings"></div>
 const token =
   localStorage.getItem(
     'adminToken'
@@ -65,71 +66,143 @@ if (!token) {
     '/admin-login.html';
 
 }
-  <script>
 
-    const API_URL =
-      'https://grasstakers-ai.onrender.com';
+</script>
 
-    async function loadBookings() {
+<h1>
+  GrassTakers Admin Dashboard
+</h1>
 
-      const response = await fetch(
+<p>
+  All customer bookings
+</p>
+
+<div id="bookings">
+  Loading bookings...
+</div>
+
+<script>
+
+const API_URL =
+  'https://grasstakers-ai.onrender.com';
+
+async function loadBookings() {
+
+  try {
+
+    const response =
+      await fetch(
         `${API_URL}/api/bookings`
       );
 
-      const bookings =
-        await response.json();
+    const bookings =
+      await response.json();
 
-      const bookingsDiv =
-        document.getElementById(
-          'bookings'
-        );
+    const container =
+      document.getElementById(
+        'bookings'
+      );
 
-      bookingsDiv.innerHTML = '';
+    if (
+      !bookings ||
+      bookings.length === 0
+    ) {
 
-      bookings.forEach((booking) => {
+      container.innerHTML =
+        '<p>No bookings found.</p>';
 
-        bookingsDiv.innerHTML += `
-
-          <div class="booking">
-
-            <h3>${booking.name}</h3>
-
-            <p>
-              <strong>Phone:</strong>
-              ${booking.phone}
-            </p>
-
-            <p>
-              <strong>Address:</strong>
-              ${booking.address}
-            </p>
-
-            <p>
-              <strong>Service:</strong>
-              ${booking.service}
-            </p>
-
-            <p>
-              <strong>Message:</strong>
-              ${booking.message}
-            </p>
-
-            <button
-              onclick="deleteBooking(${booking.id})"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        `;
-
-      });
+      return;
 
     }
 
-    async function deleteBooking(id) {
+    container.innerHTML = '';
 
+    bookings.forEach(
+      booking => {
+
+        const div =
+          document.createElement(
+            'div'
+          );
+
+        div.className =
+          'booking';
+
+        div.innerHTML = `
+
+          <h3>
+            Booking #${booking.id}
+          </h3>
+
+          <p>
+            <strong>Name:</strong>
+            ${booking.name || ''}
+          </p>
+
+          <p>
+            <strong>Phone:</strong>
+            ${booking.phone || ''}
+          </p>
+
+          <p>
+            <strong>Address:</strong>
+            ${booking.address || ''}
+          </p>
+
+          <p>
+            <strong>Service:</strong>
+            ${booking.service || ''}
+          </p>
+
+          <p>
+            <strong>Message:</strong>
+            ${booking.message || ''}
+          </p>
+
+          <button
+            onclick="deleteBooking(${booking.id})"
+          >
+            Delete Booking
+          </button>
+
+        `;
+
+        container.appendChild(
+          div
+        );
+
+      }
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+    document.getElementById(
+      'bookings'
+    ).innerHTML =
+      'Failed to load bookings';
+
+  }
+
+}
+
+async function deleteBooking(
+  id
+) {
+
+  const confirmed =
+    confirm(
+      'Delete this booking?'
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    const response =
       await fetch(
         `${API_URL}/api/bookings/${id}`,
         {
@@ -137,14 +210,36 @@ if (!token) {
         }
       );
 
+    const data =
+      await response.json();
+
+    if (data.success) {
+
       loadBookings();
+
+    } else {
+
+      alert(
+        'Delete failed'
+      );
 
     }
 
-    loadBookings();
+  } catch (error) {
 
-  </script>
+    console.log(error);
+
+    alert(
+      'Server error'
+    );
+
+  }
+
+}
+
+loadBookings();
+
+</script>
 
 </body>
-
 </html>
