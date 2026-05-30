@@ -5,7 +5,6 @@ const cors = require('cors');
 const Groq = require('groq-sdk');
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
-const { Resend } = require('resend');
 
 const app = express();
 
@@ -15,10 +14,6 @@ app.use(express.json());
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
-
-const resend = new Resend(
-  process.env.RESEND_API_KEY
-);
 
 const db = new sqlite3.Database('./grasstakers.db');
 
@@ -53,7 +48,7 @@ app.post('/api/admin/login', (req, res) => {
 
   if (
     username === process.env.ADMIN_USER &&
-    password === process.env.ADMIN_PASSWORD
+    password === process.envD
   ) {
 
     const token = jwt.sign(
@@ -71,63 +66,7 @@ app.post('/api/admin/login', (req, res) => {
 
   res.status(401).json({
     success: false,
-    message: 'Invalid username or password'
-  });
-
-});
-
-app.post('/api/chat', async (req, res) => {
-
-  try {
-
-    const message = req.body.message;
-
-    if (!message) {
-
-      return res.status(400).json({
-        reply: 'No message provided'
-      });
-
-    }
-
-    const completion =
-      await groq.chat.completions.create({
-
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, aeration, landscaping, weed control, seasonal cleanup, and lawn maintenance.'
-          },
-          {
-            role: 'user',
-            content: message
-          }
-        ],
-
-        model: 'llama-3.1-8b-instant'
-
-      });
-
-    const reply =
-      completion.choices?.[0]?.message?.content ||
-      'No AI response';
-
-    res.json({
-      reply
-    });
-
-  } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      reply: 'AI request failed'
-    });
-
-  }
-
-});
+    message: 'Invalid username or pa
 
 app.post('/api/book', (req, res) => {
 
@@ -184,12 +123,15 @@ app.post('/api/book', (req, res) => {
             <h2>New Booking</h2>
 
             <p><strong>Name:</strong> ${name}</p>
+
             <p><strong>Phone:</strong> ${phone}</p>
+
             <p><strong>Address:</strong> ${address}</p>
+
             <p><strong>Service:</strong> ${service}</p>
+
             <p><strong>Message:</strong> ${message}</p>
           `
-
         });
 
       } catch (emailError) {
