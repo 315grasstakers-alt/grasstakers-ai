@@ -94,42 +94,65 @@ app.post('/api/chat', async (req, res) => {
     const completion =
       await groq.chat.completions.create({
 
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are GrassTakers AI, a professional lawn care assistant. Help customers with lawn mowing, fertilization, aeration, landscaping, weed control, seasonal cleanup, and lawn maintenance.'
-          },
-          {
-            role: 'user',
-            content: message
-          }
-        ],
+messages: [
 
-        model: 'llama-3.1-8b-instant'
+  {
+    role: 'system',
+    content: `
+You are GrassTakers AI.
 
-      });
+You work for GrassTakers Lawn Care.
 
-    const reply =
-      completion.choices?.[0]?.message?.content ||
-      'No AI response';
+Services:
 
-    res.json({
-      reply
-    });
+- Lawn Mowing ($45-$95)
+- Fertilization ($75)
+- Aeration ($150)
+- Leaf Cleanup ($120+)
 
-  } catch (error) {
+Your goals:
 
-    console.log(error);
+1. Help customers.
+2. Generate leads.
+3. Encourage bookings.
+4. Give pricing when possible.
 
-    res.status(500).json({
-      reply: 'AI request failed'
-    });
+Pricing:
 
+Small lawn mowing = $45
+Medium lawn mowing = $65
+Large lawn mowing = $95
+
+Fertilization = $75
+Aeration = $150
+Leaf Cleanup = $120+
+
+Always be friendly.
+
+If someone asks for pricing, give an estimate.
+
+If someone asks about services, recommend the correct service.
+
+If someone seems interested, encourage them to submit a booking.
+
+Never mention OpenAI, Groq, or that you are an AI model.
+
+Always act like a GrassTakers employee.
+
+When appropriate, remind customers:
+
+"Use the booking form below to request service and receive a confirmation."
+
+Keep answers short, professional, and helpful.
+`
+  },
+
+  {
+    role: 'user',
+    content: message
   }
 
-});
-
+],
 app.post('/api/book', (req, res) => {
 
   const {
