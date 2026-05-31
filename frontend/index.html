@@ -13,58 +13,76 @@
   <title>GrassTakers AI</title>
 
   <style>
+<div class="booking-box">
 
-    body {
-      font-family: Arial;
-      background: #111;
-      color: white;
-      padding: 40px;
-      max-width: 900px;
-      margin: auto;
-    }
+  <h2>Book Lawn Service</h2>
 
-    h1 {
-      color: #4ade80;
-    }
+  <input
+    type="text"
+    id="name"
+    placeholder="Your Name"
+  />
 
-    input,
-    textarea,
-    button,
-    select {
+  <input
+    type="text"
+    id="phone"
+    placeholder="Phone Number (Optional)"
+  />
 
-      width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
+  <input
+    type="text"
+    id="address"
+    placeholder="Property Address"
+  />
 
-    button {
-      background: #4ade80;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  <select id="service">
 
-    .response,
-    .card,
-    .booking-box {
+    <option>Lawn Mowing</option>
+    <option>Fertilization</option>
+    <option>Aeration</option>
+    <option>Leaf Cleanup</option>
 
-      background: #1f1f1f;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
+  </select>
 
-    .services {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
+  <label>Yard Size</label>
 
+  <select id="yardSize">
+
+    <option value="Small">
+      Small
+    </option>
+
+    <option value="Medium">
+      Medium
+    </option>
+
+    <option value="Large">
+      Large
+    </option>
+
+  </select>
+
+  <button
+    type="button"
+    onclick="getQuote()"
+  >
+    Get Instant Quote
+  </button>
+
+  <div id="quoteResult"></div>
+
+  <textarea
+    id="bookingMessage"
+    placeholder="Additional details..."
+  ></textarea>
+
+  <button onclick="submitBooking()">
+    Submit Booking
+  </button>
+
+  <div id="bookingResponse"></div>
+
+</div>
   </style>
 
 </head>

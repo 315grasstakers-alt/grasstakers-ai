@@ -304,6 +304,41 @@ app.delete('/api/bookings/:id', (req, res) => {
 
 });
 
+app.post('/api/quote', (req, res) => {
+
+  const {
+    service,
+    yardSize
+  } = req.body;
+
+  let quote = 0;
+
+  if (service === 'Lawn Mowing') {
+
+    if (yardSize === 'Small') quote = 45;
+    if (yardSize === 'Medium') quote = 65;
+    if (yardSize === 'Large') quote = 95;
+
+  }
+
+  if (service === 'Fertilization') {
+    quote = 75;
+  }
+
+  if (service === 'Aeration') {
+    quote = 150;
+  }
+
+  if (service === 'Leaf Cleanup') {
+    quote = 120;
+  }
+
+  res.json({
+    success: true,
+    quote
+  });
+
+});
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, '0.0.0.0', () => {

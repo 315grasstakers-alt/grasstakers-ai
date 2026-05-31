@@ -4,10 +4,14 @@ const API_URL =
 async function askAI() {
 
   const message =
-    document.getElementById('message').value;
+    document.getElementById(
+      'message'
+    ).value;
 
   const responseBox =
-    document.getElementById('response');
+    document.getElementById(
+      'response'
+    );
 
   if (!message) {
 
@@ -15,6 +19,7 @@ async function askAI() {
       'Please type a message';
 
     return;
+
   }
 
   responseBox.innerHTML =
@@ -22,20 +27,20 @@ async function askAI() {
 
   try {
 
-    const response = await fetch(
-      `${API_URL}/api/chat`,
-      {
-        method: 'POST',
-
-        headers: {
-          'Content-Type': 'application/json'
-        },
-
-        body: JSON.stringify({
-          message: message
-        })
-      }
-    );
+    const response =
+      await fetch(
+        `${API_URL}/api/chat`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+          body: JSON.stringify({
+            message
+          })
+        }
+      );
 
     const data =
       await response.json();
@@ -54,6 +59,57 @@ async function askAI() {
 
 }
 
+async function getQuote() {
+
+  const service =
+    document.getElementById(
+      'service'
+    ).value;
+
+  const yardSize =
+    document.getElementById(
+      'yardSize'
+    ).value;
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/api/quote`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+          body: JSON.stringify({
+            service,
+            yardSize
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    document.getElementById(
+      'quoteResult'
+    ).innerHTML =
+      `💰 Estimated Quote: $${data.quote}`;
+
+  } catch (error) {
+
+    console.log(error);
+
+    document.getElementById(
+      'quoteResult'
+    ).innerHTML =
+      'Unable to calculate quote';
+
+  }
+
+}
+
 async function submitBooking() {
 
   const bookingResponse =
@@ -67,16 +123,29 @@ async function submitBooking() {
   const bookingData = {
 
     name:
-      document.getElementById('name').value,
+      document.getElementById(
+        'name'
+      ).value,
 
     phone:
-      document.getElementById('phone').value,
+      document.getElementById(
+        'phone'
+      ).value,
 
     address:
-      document.getElementById('address').value,
+      document.getElementById(
+        'address'
+      ).value,
 
     service:
-      document.getElementById('service').value,
+      document.getElementById(
+        'service'
+      ).value,
+
+    yardSize:
+      document.getElementById(
+        'yardSize'
+      ).value,
 
     message:
       document.getElementById(
@@ -87,20 +156,20 @@ async function submitBooking() {
 
   try {
 
-    const response = await fetch(
-      `${API_URL}/api/book`,
-      {
-        method: 'POST',
-
-        headers: {
-          'Content-Type': 'application/json'
-        },
-
-        body: JSON.stringify(
-          bookingData
-        )
-      }
-    );
+    const response =
+      await fetch(
+        `${API_URL}/api/book`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+          body: JSON.stringify(
+            bookingData
+          )
+        }
+      );
 
     const data =
       await response.json();
