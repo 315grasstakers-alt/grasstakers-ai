@@ -1,185 +1,194 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-  <meta charset="UTF-8" />
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-  <title>GrassTakers AI</title>
+<title>GrassTakers AI</title>
 
-  <style>
-<div class="booking-box">
+<style>
 
-  <h2>Book Lawn Service</h2>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+  max-width: 900px;
+  margin: auto;
+  padding: 40px;
+}
 
-  <input
-    type="text"
-    id="name"
-    placeholder="Your Name"
-  />
+h1 {
+  color: #4ade80;
+}
 
-  <input
-    type="text"
-    id="phone"
-    placeholder="Phone Number (Optional)"
-  />
+input,
+textarea,
+select,
+button {
 
-  <input
-    type="text"
-    id="address"
-    placeholder="Property Address"
-  />
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
 
-  <select id="service">
+}
 
-    <option>Lawn Mowing</option>
-    <option>Fertilization</option>
-    <option>Aeration</option>
-    <option>Leaf Cleanup</option>
+button {
 
-  </select>
+  background: #4ade80;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
 
-  <label>Yard Size</label>
+}
 
-  <select id="yardSize">
+.response,
+.card,
+.booking-box {
 
-    <option value="Small">
-      Small
-    </option>
+  background: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
 
-    <option value="Medium">
-      Medium
-    </option>
+}
 
-    <option value="Large">
-      Large
-    </option>
+.services {
 
-  </select>
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(200px,1fr));
+  gap: 20px;
+  margin-top: 30px;
 
-  <button
-    type="button"
-    onclick="getQuote()"
-  >
-    Get Instant Quote
-  </button>
+}
 
-  <div id="quoteResult"></div>
+#quoteResult {
+  font-size: 20px;
+  color: #4ade80;
+  margin-bottom: 15px;
+}
 
-  <textarea
-    id="bookingMessage"
-    placeholder="Additional details..."
-  ></textarea>
-
-  <button onclick="submitBooking()">
-    Submit Booking
-  </button>
-
-  <div id="bookingResponse"></div>
-
-</div>
-  </style>
+</style>
 
 </head>
 
 <body>
 
-  <h1>GrassTakers AI</h1>
+<h1>GrassTakers AI</h1>
 
-  <p>AI-powered lawn care assistant</p>
+<p>AI-powered lawn care assistant</p>
 
-  <input
-    type="text"
-    id="message"
-    placeholder="Ask GrassTakers AI..."
-  />
+<input
+type="text"
+id="message"
+placeholder="Ask GrassTakers AI...">
 
-  <button onclick="askAI()">
-    Ask AI
-  </button>
+<button onclick="askAI()">
+Ask AI
+</button>
 
-  <div
-    class="response"
-    id="response"
-  >
-    Your AI response will appear here.
-  </div>
+<div
+class="response"
+id="response">
+Your AI response will appear here.
+</div>
 
-  <div class="booking-box">
+<div class="booking-box">
 
-    <h2>Book Lawn Service</h2>
+<h2>Book Lawn Service</h2>
 
-    <input
-      type="text"
-      id="name"
-      placeholder="Your Name"
-    />
+<input
+type="text"
+id="name"
+placeholder="Your Name">
 
-    <input
-      type="text"
-      id="phone"
-      placeholder="Phone Number"
-    />
+<input
+type="text"
+id="phone"
+placeholder="Phone Number (Optional)">
 
-    <input
-      type="text"
-      id="address"
-      placeholder="Property Address"
-    />
+<input
+type="text"
+id="address"
+placeholder="Property Address">
 
-    <select id="service">
+<select id="service">
 
-      <option>Lawn Mowing</option>
-      <option>Fertilization</option>
-      <option>Aeration</option>
-      <option>Leaf Cleanup</option>
+<option>Lawn Mowing</option>
+<option>Fertilization</option>
+<option>Aeration</option>
+<option>Leaf Cleanup</option>
 
-    </select>
+</select>
 
-    <textarea
-      id="bookingMessage"
-      placeholder="Additional details..."
-    ></textarea>
+<label>Yard Size</label>
 
-    <button onclick="submitBooking()">
-      Submit Booking
-    </button>
+<select id="yardSize">
 
-    <div id="bookingResponse"></div>
+<option value="Small">Small</option>
+<option value="Medium">Medium</option>
+<option value="Large">Large</option>
 
-  </div>
+</select>
 
-  <div class="services">
+<button
+type="button"
+onclick="getQuote()">
+Get Instant Quote
+</button>
 
-    <div class="card">
-      <h3>Lawn Mowing</h3>
-      <p>Starting at $45</p>
-    </div>
+<div id="quoteResult"></div>
 
-    <div class="card">
-      <h3>Fertilization</h3>
-      <p>Starting at $75</p>
-    </div>
+<textarea
+id="bookingMessage"
+placeholder="Additional details..."></textarea>
 
-    <div class="card">
-      <h3>Aeration</h3>
-      <p>Starting at $150</p>
-    </div>
+<button
+type="button"
+onclick="submitBooking()">
+Submit Booking
+</button>
 
-    <div class="card">
-      <h3>Leaf Cleanup</h3>
-      <p>Seasonal cleanups available</p>
-    </div>
+<div id="bookingResponse"></div>
 
-  </div>
+</div>
 
-  <script src="app.js"></script>
+<div class="services">
+
+<div class="card">
+<h3>Lawn Mowing</h3>
+<p>Starting at $45</p>
+</div>
+
+<div class="card">
+<h3>Fertilization</h3>
+<p>Starting at $75</p>
+</div>
+
+<div class="card">
+<h3>Aeration</h3>
+<p>Starting at $150</p>
+</div>
+
+<div class="card">
+<h3>Leaf Cleanup</h3>
+<p>Seasonal cleanups available</p>
+</div>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
-
 </html>
+```
