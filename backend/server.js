@@ -5,8 +5,6 @@ const cors = require('cors');
 const Groq = require('groq-sdk');
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
-const { Resend } = require('resend');
-const axios = require('axios');
 
 const app = express();
 
@@ -16,10 +14,6 @@ app.use(express.json());
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
-
-const resend = new Resend(
-  process.env.RESEND_API_KEY
-);
 
 const db = new sqlite3.Database('./grasstakers.db');
 
@@ -148,11 +142,37 @@ Keep answers short, professional, and helpful.
   },
 
   {
-    role: 'user',
-    content: message
-  }
+  role: 'user',
+  content: message
+}
 
 ],
+
+model: 'llama-3.1-8b-instant'
+
+      });
+
+    const reply =
+      completion.choices?.[0]?.message?.content ||
+      'No AI response';
+
+    res.json({
+      reply
+    });
+
+} catch (error) {
+
+  console.error('GROQ ERROR:');
+  console.error(error);
+
+  res.status(500).json({
+    reply: 'AI request failed'
+  });
+
+}
+
+});
+
 app.post('/api/book', (req, res) => {
 
   const {
@@ -194,69 +214,6 @@ app.post('/api/book', (req, res) => {
 
       }
 
-      try {
-
-        if (process.env.RESEND_API_KEY) {
-
-          await resend.emails.send({
-
-            from: 'onboarding@resend.dev',
-
-            to: '315grasstakers@gmail.com',
-
-            subject: 'New GrassTakers Booking',
-
-            html: `
-              <h2>New Booking</h2>
-
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Phone:</strong> ${phone}</p>
-              <p><strong>Address:</strong> ${address}</p>
-              <p><strong>Service:</strong> ${service}</p>
-              <p><strong>Message:</strong> ${message}</p>
-            `
-
-          });
-
-        }
-
-      } catch (emailError) {
-
-        console.log(
-          'Email Error:',
-          emailError
-        );
-
-      }
-
-      try {
-
-        if (process.env.DISCORD_WEBHOOK_URL) {
-
-          await axios.post(
-            process.env.DISCORD_WEBHOOK_URL,
-            {
-              content:
-`🌱 NEW GRASSTAKERS BOOKING
-
-Name: ${name}
-Phone: ${phone}
-Address: ${address}
-Service: ${service}
-Message: ${message}`
-            }
-          );
-
-        }
-
-      } catch (discordError) {
-
-        console.log(
-          'Discord Error:',
-          discordError.message
-        );
-
-      }
 
       res.json({
         success: true,
@@ -327,41 +284,6 @@ app.delete('/api/bookings/:id', (req, res) => {
 
 });
 
-app.post('/api/quote', (req, res) => {
-
-  const {
-    service,
-    yardSize
-  } = req.body;
-
-  let quote = 0;
-
-  if (service === 'Lawn Mowing') {
-
-    if (yardSize === 'Small') quote = 45;
-    if (yardSize === 'Medium') quote = 65;
-    if (yardSize === 'Large') quote = 95;
-
-  }
-
-  if (service === 'Fertilization') {
-    quote = 75;
-  }
-
-  if (service === 'Aeration') {
-    quote = 150;
-  }
-
-  if (service === 'Leaf Cleanup') {
-    quote = 120;
-  }
-
-  res.json({
-    success: true,
-    quote
-  });
-
-});
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, '0.0.0.0', () => {
