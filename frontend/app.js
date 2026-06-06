@@ -62,41 +62,39 @@ async function askAI() {
 async function getQuote() {
 
   const service =
-    document.getElementById(
-      'service'
-    ).value;
+    document.getElementById('service').value;
 
   const yardSize =
-    document.getElementById(
-      'yardSize'
-    ).value;
+    document.getElementById('yardSize').value;
 
-  try {
+  let quote = 0;
 
-    const response =
-      await fetch(
-        `${API_URL}/api/quote`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type':
-              'application/json'
-          },
-          body: JSON.stringify({
-            service,
-            yardSize
-          })
-        }
-      );
+  if (service === 'Lawn Mowing') {
 
-    const data =
-      await response.json();
+    if (yardSize === 'Small') quote = 45;
+    else if (yardSize === 'Medium') quote = 65;
+    else if (yardSize === 'Large') quote = 95;
 
-    document.getElementById(
-      'quoteResult'
-    ).innerHTML =
-      `💰 Estimated Quote: $${data.quote}`;
+  } else if (service === 'Fertilization') {
 
+    quote = 75;
+
+  } else if (service === 'Aeration') {
+
+    quote = 150;
+
+  } else if (service === 'Leaf Cleanup') {
+
+    quote = 120;
+
+  }
+
+  document.getElementById(
+    'quoteResult'
+  ).innerHTML =
+    `💰 Estimated Quote: $${quote}`;
+
+}
   } catch (error) {
 
     console.log(error);
