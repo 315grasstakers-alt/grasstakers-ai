@@ -62,28 +62,42 @@ async function askAI() {
 async function getQuote() {
 
   const service =
-    document.getElementById('service').value;
+    document.getElementById(
+      'service'
+    ).value;
 
   const yardSize =
-    document.getElementById('yardSize').value;
+    document.getElementById(
+      'yardSize'
+    ).value;
 
   let quote = 0;
 
   if (service === 'Lawn Mowing') {
 
-    if (yardSize === 'Small') quote = 45;
-    else if (yardSize === 'Medium') quote = 65;
-    else if (yardSize === 'Large') quote = 95;
+    if (yardSize === 'Small') {
+      quote = 45;
+    } else if (yardSize === 'Medium') {
+      quote = 65;
+    } else if (yardSize === 'Large') {
+      quote = 95;
+    }
 
-  } else if (service === 'Fertilization') {
+  } else if (
+    service === 'Fertilization'
+  ) {
 
     quote = 75;
 
-  } else if (service === 'Aeration') {
+  } else if (
+    service === 'Aeration'
+  ) {
 
     quote = 150;
 
-  } else if (service === 'Leaf Cleanup') {
+  } else if (
+    service === 'Leaf Cleanup'
+  ) {
 
     quote = 120;
 
@@ -93,18 +107,6 @@ async function getQuote() {
     'quoteResult'
   ).innerHTML =
     `💰 Estimated Quote: $${quote}`;
-
-}
-  } catch (error) {
-
-    console.log(error);
-
-    document.getElementById(
-      'quoteResult'
-    ).innerHTML =
-      'Unable to calculate quote';
-
-  }
 
 }
 
